@@ -2,7 +2,7 @@ class Pcl < Formula
   desc "Library for 2D/3D image and point cloud processing"
   homepage "https://pointclouds.org/"
   license "BSD-3-Clause"
-  revision 4
+  revision 5
   head "https://github.com/PointCloudLibrary/pcl.git", branch: "master"
 
   stable do
@@ -21,6 +21,10 @@ class Pcl < Formula
       url "https://github.com/PointCloudLibrary/pcl/commit/8dfb0e10ebdf4a5086328b38f854294d2d6b1627.patch?full_index=1"
       sha256 "f31c11abb6bec8864b7a109472768ba80e87ddf90533890c303294d264f389e1"
     end
+
+    # On Linux, libpcl_visualization calls Xlib functions directly via `vtkFixedXRenderWindowInteractor`,
+    # but does not link X11 itself; it used to inherit X11 transitively from VTK and now it doesn/t work.
+    patch :DATA
   end
 
   bottle do
@@ -156,3 +160,19 @@ class Pcl < Formula
     assert_match "4 5 6", output
   end
 end
+
+__END__
+--- a/visualization/CMakeLists.txt
++++ b/visualization/CMakeLists.txt
+@@ -140,6 +140,11 @@
+
+ target_link_libraries("${LIB_NAME}" pcl_common pcl_io pcl_kdtree pcl_geometry pcl_search ${OPENGL_LIBRARIES})
+
++if(UNIX AND NOT APPLE)
++  find_package(X11 REQUIRED)
++  target_link_libraries("${LIB_NAME}" ${X11_LIBRARIES})
++endif()
++
+ if(${VTK_VERSION} VERSION_GREATER_EQUAL 9.0)
+   #Some libs are referenced through depending on IO
+   target_link_libraries("${LIB_NAME}"
