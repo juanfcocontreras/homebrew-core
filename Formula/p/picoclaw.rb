@@ -1,8 +1,8 @@
 class Picoclaw < Formula
   desc "Ultra-efficient personal AI assistant in Go"
   homepage "https://picoclaw.io/"
-  url "https://github.com/sipeed/picoclaw/archive/refs/tags/v0.2.7.tar.gz"
-  sha256 "e3ecda2a7382c7236fb95e6236b369de0c0be9d60bc834d05fa3ef6396b0f7c8"
+  url "https://github.com/sipeed/picoclaw/archive/refs/tags/v0.2.8.tar.gz"
+  sha256 "5700303db0b083bd6f05aca226126b800c323db790fc749307cd31f6c9012d8f"
   license "MIT"
   head "https://github.com/sipeed/picoclaw.git", branch: "main"
 
